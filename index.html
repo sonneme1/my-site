@@ -34,6 +34,18 @@
         </div>
     </section>
 
+    <section id="weather">
+        <h2>Current Weather</h2>
+        <div class="weather-card" id="weather-card">
+            <div class="weather-icon" id="weather-icon">☀️</div>
+            <div class="weather-details">
+                <div class="weather-temp" id="weather-temp">--°F</div>
+                <div class="weather-summary" id="weather-summary">Loading weather...</div>
+                <div class="weather-location" id="weather-location">Allow location to see weather</div>
+            </div>
+        </div>
+    </section>
+
     <section id="contact">
         <h2>Contact</h2>
         <p>Let's connect! You can reach me at:</p>
@@ -45,5 +57,75 @@
     <footer>
         <p>&copy; 2026 Melissa. All rights reserved.</p>
     </footer>
+
+    <script>
+        const weatherIcon = document.getElementById('weather-icon');
+        const weatherTemp = document.getElementById('weather-temp');
+        const weatherSummary = document.getElementById('weather-summary');
+        const weatherLocation = document.getElementById('weather-location');
+
+        function weatherEmoji(code) {
+            if (code === 0) return '☀️';
+            if ([1, 2, 3].includes(code)) return '⛅';
+            if ([45, 48].includes(code)) return '🌫️';
+            if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return '🌧️';
+            if ([56, 57, 66, 67].includes(code)) return '🌨️';
+            if ([71, 73, 75, 77, 85, 86].includes(code)) return '❄️';
+            if ([95, 96, 99].includes(code)) return '⛈️';
+            return '🌤️';
+        }
+
+        function weatherLabel(code) {
+            if (code === 0) return 'Clear';
+            if ([1, 2, 3].includes(code)) return 'Partly Cloudy';
+            if ([45, 48].includes(code)) return 'Foggy';
+            if ([51, 53, 55].includes(code)) return 'Drizzle';
+            if ([61, 63, 65, 80, 81, 82].includes(code)) return 'Rainy';
+            if ([56, 57, 66, 67].includes(code)) return 'Freezing Rain';
+            if ([71, 73, 75, 77, 85, 86].includes(code)) return 'Snowy';
+            if ([95, 96, 99].includes(code)) return 'Thunderstorms';
+            return 'Weather';
+        }
+
+        function showError(message) {
+            weatherTemp.textContent = '--°F';
+            weatherSummary.textContent = message;
+            weatherLocation.textContent = '';
+            weatherIcon.textContent = '⚠️';
+            document.getElementById('weather-card').classList.add('weather-error');
+        }
+
+        function updateWeather(data, coords) {
+            if (!data || !data.current_weather) {
+                showError('Unable to load weather');
+                return;
+            }
+
+            const { temperature, weathercode } = data.current_weather;
+            weatherIcon.textContent = weatherEmoji(weathercode);
+            weatherTemp.textContent = `${Math.round(temperature)}°F`;
+            weatherSummary.textContent = weatherLabel(weathercode);
+            weatherLocation.textContent = `Lat ${coords.latitude.toFixed(2)} · Lon ${coords.longitude.toFixed(2)}`;
+        }
+
+        function loadWeather(position) {
+            const { latitude, longitude } = position.coords;
+            const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&temperature_unit=fahrenheit&timezone=auto`;
+
+            fetch(endpoint)
+                .then(response => response.json())
+                .then(data => updateWeather(data, { latitude, longitude }))
+                .catch(() => showError('Weather service unavailable'));
+        }
+
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                loadWeather,
+                () => showError('Enable location to see your weather')
+            );
+        } else {
+            showError('Geolocation not supported');
+        }
+    </script>
 </body>
 </html>

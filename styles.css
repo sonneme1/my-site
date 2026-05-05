@@ -52,3 +52,50 @@ footer {
     background-color: #333;
     color: white;
 }
+
+#weather {
+    margin-bottom: 2rem;
+}
+
+.weather-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background-color: #f8fbff;
+    border: 1px solid #d2e4fb;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(74, 144, 226, 0.08);
+}
+
+.weather-icon {
+    font-size: 3rem;
+    width: 4rem;
+    text-align: center;
+}
+
+.weather-details {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.weather-temp {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f5fa8;
+}
+
+.weather-summary {
+    font-size: 1rem;
+    color: #333;
+}
+
+.weather-location {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.weather-error {
+    border-color: #f2b8b5;
+    background-color: #fff1f0;
+}
