@@ -90,9 +90,53 @@ footer {
     color: #333;
 }
 
-.weather-location {
+.weather-location,
+.weather-place {
     font-size: 0.95rem;
     color: #555;
+}
+
+.forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+
+.forecast-card {
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e4eefb;
+    box-shadow: 0 8px 20px rgba(74, 144, 226, 0.06);
+    text-align: center;
+}
+
+.forecast-day {
+    font-weight: 700;
+    color: #1f5fa8;
+    margin-bottom: 0.5rem;
+}
+
+.forecast-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.forecast-summary {
+    font-size: 0.95rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.forecast-temps {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.forecast-loading {
+    grid-column: 1 / -1;
+    opacity: 0.8;
 }
 
 .weather-error {
